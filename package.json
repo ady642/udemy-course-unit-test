@@ -1,0 +1,23 @@
+{
+  "name": "my-vue-app",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "vue": "^3.3.4"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "@vue/test-utils": "^2.4.0",
+    "happy-dom": "^10.5.1",
+    "vite": "^4.4.0",
+    "vitest": "^0.33.0"
+  }
+}
