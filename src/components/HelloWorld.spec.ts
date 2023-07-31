@@ -1,7 +1,8 @@
-import {it, expect, vi, describe, beforeEach } from "vitest"
+import { vi } from "vitest"
 import { shallowMount } from "@vue/test-utils"
 import HelloWorld from "./HelloWorld.vue";
-import axios from "axios";
+import {createTestingPinia} from "@pinia/testing";
+import {useAppStore} from "../stores/appStore";
 
 vi.mock('axios')
 
@@ -15,7 +16,7 @@ describe('HelloWorld test suites', () => {
         })
         // Then we expect that the fetch function is called with good url
         expect(fetch).toHaveBeenNthCalledWith(1, 'https://example.com/test')
-    })*/
+    })
     it('should call axios.get function with https://httpbin.org/get when msg property changes', async () => {
         // Given the HelloWorld component is mounted
         const instance = shallowMount(HelloWorld)
@@ -25,5 +26,20 @@ describe('HelloWorld test suites', () => {
         })
         // Then we expect that the fetch function is called with good url
         expect(axios.get).toHaveBeenNthCalledWith(1, 'https://httpbin.org/get')
+    })*/
+    it('should dispatch changeMessage with "test" if msg property changes as "test"', async () => {
+        const wrapper = shallowMount(HelloWorld, {
+            global: {
+                plugins: [createTestingPinia()]
+            }
+        })
+
+        const store = useAppStore()
+
+        await wrapper.setProps({
+          msg: 'test'
+        })
+
+        expect(store.changeMessage).toHaveBeenNthCalledWith(1, 'test')
     })
 })
