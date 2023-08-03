@@ -3,6 +3,7 @@ import { shallowMount } from "@vue/test-utils"
 import HelloWorld from "./HelloWorld.vue";
 import {createTestingPinia} from "@pinia/testing";
 import {useAppStore} from "../stores/appStore";
+import TitleComponent from "./TitleComponent.vue";
 
 vi.mock('axios')
 
@@ -41,5 +42,16 @@ describe('HelloWorld test suites', () => {
         })
 
         expect(store.changeMessage).toHaveBeenNthCalledWith(1, 'test')
+    })
+    it('should bind the msg property with a prefix(My Title:) to TitleComponent', () => {
+        const wrapper = shallowMount(HelloWorld, {
+            props: {
+                msg: 'First section'
+            }
+        })
+
+        const titleComponentWrapper = wrapper.findComponent(TitleComponent)
+
+        expect(titleComponentWrapper.props('value')).toBe('My Title: First section')
     })
 })

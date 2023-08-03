@@ -1,0 +1,7 @@
+<script setup lang="ts">
+defineProps<{ value: string }>()
+</script>
+
+<template>
+  <h1>{{ value }}</h1>
+</template>
