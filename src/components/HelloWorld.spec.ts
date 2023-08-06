@@ -1,11 +1,14 @@
 import { vi } from "vitest"
 import { shallowMount } from "@vue/test-utils"
-import HelloWorld from "./HelloWorld.vue";
+import HelloWorld, {HelloWorldProps} from "./HelloWorld.vue"
 import {createTestingPinia} from "@pinia/testing";
 import {useAppStore} from "../stores/appStore";
 import TitleComponent from "./TitleComponent.vue";
+import {create} from "axios";
 
 vi.mock('axios')
+
+const createWrapper = (props?: HelloWorldProps) => shallowMount(HelloWorld, {props})
 
 describe('HelloWorld test suites', () => {
     /*it('should make a fetch call using correct url depending on msg property', async () => {
@@ -53,5 +56,70 @@ describe('HelloWorld test suites', () => {
         const titleComponentWrapper = wrapper.findComponent(TitleComponent)
 
         expect(titleComponentWrapper.props('value')).toBe('My Title: First section')
+    })
+    /*test.each([
+        {msg: 'First section', titleComponentExists: true},
+        {msg: undefined, titleComponentExists: false},
+        {msg: '', titleComponentExists: false},
+    ])('msg: $msg -> titleComponentExists: $titleComponentExists', ({ msg, titleComponentExists }) => {
+        const wrapper = shallowMount(HelloWorld, {
+            props: {
+                msg
+            }
+        })
+
+        const titleComponentWrapper = wrapper.findComponent(TitleComponent)
+
+        expect(titleComponentWrapper.exists()).toBe(titleComponentExists)
+    })*/
+    test.each([
+        {msg: 'First section', successClassExists: false},
+        {msg: undefined, successClassExists: true},
+        {msg: '', successClassExists: true},
+    ])('msg: $msg -> successClassExists: $successClassExists', ({ msg, successClassExists }) => {
+        const wrapper = shallowMount(HelloWorld, {
+            props: {
+                msg
+            }
+        })
+
+        const cardElementWrapper = wrapper.find<HTMLDivElement>('.card-success')
+
+        expect(cardElementWrapper.exists()).toBe(successClassExists)
+    })
+    test.each([
+        {msg: 'First section', titleComponentStyle: undefined},
+        {msg: undefined, titleComponentStyle: 'display: none;'},
+        {msg: '', titleComponentStyle: 'display: none;'},
+    ])('msg: $msg -> titleComponentStyle: $titleComponentStyle', ({ msg, titleComponentStyle }) => {
+        const wrapper = shallowMount(HelloWorld, {
+            props: {
+                msg
+            }
+        })
+
+        const titleComponentWrapper = wrapper.findComponent(TitleComponent)
+
+        expect(titleComponentWrapper.element.attributes.getNamedItem('style')?.value).toBe(titleComponentStyle)
+    })
+    it('should emit card-clicked when the card is clicked', async () => {
+        const wrapper = createWrapper()
+
+        const card = wrapper.find('.card')
+
+        await card.trigger('click')
+
+        expect(wrapper.emitted('card-clicked')).toBeTruthy()
+    })
+    it('should emit up event when title component emit on-mounted event', async () => {
+        const wrapper = createWrapper()
+
+        const titleComponentWrapper = wrapper.findComponent(TitleComponent)
+
+        titleComponentWrapper.vm.$emit('on-mounted')
+
+        expect(wrapper.emitted('up')).toBeTruthy()
+        expect(wrapper.emitted('up')).toHaveLength(1)
+        expect(wrapper.emitted('up')?.[0][0]).toBe(0)
     })
 })

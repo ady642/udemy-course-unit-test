@@ -1,17 +1,30 @@
-<script setup>
-import { ref, watch, defineProps, computed } from 'vue'
-import axios from 'axios'
-import {useAppStore} from "../stores/appStore.ts";
+<script setup lang="ts">
+import { ref, watch, computed } from 'vue'
+import {useAppStore} from "../stores/appStore";
 import TitleComponent from "./TitleComponent.vue";
 
-const props = defineProps({
-  msg: String,
-})
+export interface HelloWorldProps {
+  msg?: string
+}
+
+const props = defineProps<HelloWorldProps>()
+const emit = defineEmits<{
+  (e: 'card-clicked'): void
+  (e: 'up', count: number): void
+}>()
 
 const count = ref(0)
 
 const increment = () => {
   count.value++
+}
+
+const handleCardClick = () => {
+  emit('card-clicked')
+}
+
+const handleTitleMounted = () => {
+  emit('up', count.value)
 }
 
 const prefixedMessage = computed(() => `My Title: ${props.msg}`)
@@ -21,14 +34,23 @@ const { changeMessage } = useAppStore()
 watch(() => props.msg, (value) => {
   console.log('We are in the test')
   //axios.get('https://httpbin.org/get')
+  if(!value) {
+    return
+  }
   changeMessage(value)
 })
 </script>
 
 <template>
-  <title-component :value="prefixedMessage" />
+  <title-component
+      v-show="msg"
+      :value="prefixedMessage"
+      @on-mounted="handleTitleMounted"
+  />
 
-  <div class="card">
+  <div class="card" :class="{ 'card-success': !msg }"
+    @click="handleCardClick"
+  >
     <button type="button" @click="increment">count is {{ count }}</button>
     <p>
       Edit
