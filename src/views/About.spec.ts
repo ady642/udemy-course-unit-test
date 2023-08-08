@@ -38,4 +38,13 @@ describe('About suite tests', () => {
         titleComponentWrapper = wrapper.findComponent(TitleComponent)
         expect(titleComponentWrapper.exists()).toBe(true)
     })
+    it('should emit new-message event when myMessage changes', async () => {
+        const store = useAppStore()
+        
+        await store.$patch({ myMessage: 'This is a new message' })
+
+        expect(wrapper.emitted('new-message')).toBeTruthy()
+        expect(wrapper.emitted('new-message')?.[0][0]).toBe('this is the message: This is a new message')
+        expect(wrapper.emitted('new-message')).toHaveLength(1)
+    })
 })
