@@ -40,11 +40,21 @@ describe('About suite tests', () => {
     })
     it('should emit new-message event when myMessage changes', async () => {
         const store = useAppStore()
-        
+
         await store.$patch({ myMessage: 'This is a new message' })
 
         expect(wrapper.emitted('new-message')).toBeTruthy()
         expect(wrapper.emitted('new-message')?.[0][0]).toBe('this is the message: This is a new message')
         expect(wrapper.emitted('new-message')).toHaveLength(1)
+    })
+    it('should get the user on http://server.com/user with payload as { id: 123 } when the getter changes', async () => {
+        const store = useAppStore()
+
+        await store.$patch({ myMessage: 'This is a new message' })
+
+        expect(fetch).toHaveBeenCalledWith('http://server.com/user', {
+            method: 'POST',
+            body: '{"id":123}'
+        })
     })
 })
