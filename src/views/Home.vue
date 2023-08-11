@@ -22,7 +22,13 @@ watch(myCompleteMessage, () => {
 <template>
 <TitleComponent
     v-if="myCompleteMessage"
-    :value="myCompleteMessage"/>
+    :value="myCompleteMessage"
+>
+  Fill the default slot
+  <template #after-title>
+    Filling the after-title slot
+  </template>
+</TitleComponent>
   <button @click="goToAbout">Go to About</button>
 </template>
 

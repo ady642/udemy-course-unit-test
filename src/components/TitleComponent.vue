@@ -16,5 +16,6 @@ onMounted(() => {
 </script>
 
 <template>
-  <h1>{{ value }}</h1>
+  <h1><slot>{{ value }}</slot></h1>
+  <slot name="after-title" />
 </template>

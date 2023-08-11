@@ -55,4 +55,32 @@ describe('Home suite tests', () => {
 
         expect(titleComponentWrapper.exists()).toBe(titleComponentExists)
     })
+    it('should fill the default slot of the TitleComponent', async () => {
+        wrapper= wrapperFactory(Home, {
+            global: {
+               renderStubDefaultSlot: true
+            }
+        })
+        const store = useAppStore()
+
+        await store.$patch({ myMessage: 'test' })
+
+        console.log(wrapper.html())
+
+        expect(wrapper.text()).toContain('Fill the default slot')
+    })
+    it('should fill the after-title slot', async () => {
+        wrapper= wrapperFactory(Home, {
+            global: {
+                stubs: {
+                    TitleComponent
+                }
+            }
+        })
+        const store = useAppStore()
+
+        await store.$patch({ myMessage: 'test' })
+
+        expect(wrapper.text()).toContain('Filling the after-title slot')
+    })
 })
