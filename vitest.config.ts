@@ -6,6 +6,9 @@ export default defineConfig({
     test: {
         environment: "happy-dom",
         globals: true,
-        setupFiles: ['./src/utils/setup-global-mocks.ts']
+        setupFiles: ['./src/utils/setup-global-mocks.ts'],
+        coverage: {
+            provider: 'istanbul' // or 'v8'
+        },
     }
 })
