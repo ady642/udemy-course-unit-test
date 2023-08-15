@@ -9,6 +9,10 @@ export default defineConfig({
         setupFiles: ['./src/utils/setup-global-mocks.ts'],
         coverage: {
             reporter: ['json-summary'],
+            lines: 100,
+            branches: 100,
+            functions: 100,
+            statements: 100
         }
     }
 })
