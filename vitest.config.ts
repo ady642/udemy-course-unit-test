@@ -6,6 +6,13 @@ export default defineConfig({
     test: {
         environment: "happy-dom",
         globals: true,
-        setupFiles: ['./src/utils/setup-global-mocks.ts']
+        setupFiles: ['./src/utils/setup-global-mocks.ts'],
+        coverage: {
+            reporter: ['json-summary'],
+            lines: 100,
+            branches: 100,
+            functions: 100,
+            statements: 100
+        }
     }
 })

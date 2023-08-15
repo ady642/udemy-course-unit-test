@@ -1,16 +1,22 @@
-import { vi } from "vitest"
+import {beforeEach, vi} from "vitest"
 import { shallowMount } from "@vue/test-utils"
 import HelloWorld, {HelloWorldProps} from "./HelloWorld.vue"
 import {createTestingPinia} from "@pinia/testing";
 import {useAppStore} from "../stores/appStore";
 import TitleComponent from "./TitleComponent.vue";
 import {create} from "axios";
+import wrapperFactory from "../utils/wrapperFactory";
 
 vi.mock('axios')
 
-const createWrapper = (props?: HelloWorldProps) => shallowMount(HelloWorld, {props})
+const createWrapper = (props?: HelloWorldProps) => wrapperFactory(HelloWorld, {props})
+
+let wrapper = createWrapper()
 
 describe('HelloWorld test suites', () => {
+    beforeEach(() => {
+        wrapper = createWrapper()
+    })
     /*it('should make a fetch call using correct url depending on msg property', async () => {
         // Given the HelloWorld component is mounted
         const instance = shallowMount(HelloWorld)
@@ -31,6 +37,12 @@ describe('HelloWorld test suites', () => {
         // Then we expect that the fetch function is called with good url
         expect(axios.get).toHaveBeenNthCalledWith(1, 'https://httpbin.org/get')
     })*/
+    it('should increment the count when the increment button is clicked', async () => {
+        const button = wrapper.find('button')
+        await button.trigger('click')
+
+        expect(button.text()).toBe('count is 1')
+    })
     it('should dispatch changeMessage with "test" if msg property changes as "test"', async () => {
         const wrapper = shallowMount(HelloWorld, {
             global: {
@@ -45,6 +57,15 @@ describe('HelloWorld test suites', () => {
         })
 
         expect(store.changeMessage).toHaveBeenNthCalledWith(1, 'test')
+    })
+    it('should not dispatch changeMessage action if msg property changes for a nullish value', async () => {
+        const store = useAppStore()
+
+        await wrapper.setProps({
+            msg: ''
+        })
+
+        expect(store.changeMessage).not.toHaveBeenNthCalledWith(1, '')
     })
     it('should bind the msg property with a prefix(My Title:) to TitleComponent', () => {
         const wrapper = shallowMount(HelloWorld, {

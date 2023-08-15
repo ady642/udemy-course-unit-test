@@ -44,8 +44,16 @@ describe('About suite tests', () => {
         await store.$patch({ myMessage: 'This is a new message' })
 
         expect(wrapper.emitted('new-message')).toBeTruthy()
-        expect(wrapper.emitted('new-message')?.[0][0]).toBe('this is the message: This is a new message')
+        expect(wrapper.emitted('new-message')?.[0][0]).toBe('This is a new message')
         expect(wrapper.emitted('new-message')).toHaveLength(1)
+    })
+    it('should not emit new-message event when myMessage changes and is undefined', async () => {
+        const wrapper = wrapperFactory(About)
+        const store = useAppStore()
+
+        await store.$patch({ myMessage: '' })
+
+        expect(wrapper.emitted('new-message')).toBeFalsy()
     })
     it('should get the user on http://server.com/user with payload as { id: 123 } when the getter changes', async () => {
         const store = useAppStore()

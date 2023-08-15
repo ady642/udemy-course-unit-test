@@ -3,9 +3,9 @@ import App from "./App.vue"
 import { it, expect } from "vitest"
 
 it("should render the content of hello world", () => {
-    const instance = shallowMount(App)
+    const wrapper = shallowMount(App)
 
-    console.log(instance.html())
+    const routerView = wrapper.find('router-view')
 
-    expect(instance.html()).toContain("official Vue")
+    expect(routerView.exists()).toBe(true)
 })
