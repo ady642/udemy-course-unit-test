@@ -1,9 +1,16 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
+
+const handleClick = () => {
+  window.open('https://google.com', '_blank')
+}
 </script>
 
 <template>
   <div>
+    <span class="schema" @click="handleClick">
+      <img src="/image%20(43).png" class="logo" alt="Vite logo" />
+    </span>
     <a href="https://vitejs.dev" target="_blank">
       <img src="/vite.svg" class="logo" alt="Vite logo" />
     </a>
@@ -20,6 +27,7 @@ import HelloWorld from './components/HelloWorld.vue'
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
+  cursor: pointer;
 }
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
